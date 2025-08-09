@@ -4,127 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SK Poultry Farm</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        /* Container */
-        .container {
-            text-align: center;
-            padding: 0;
-        }
-        /* Farm header with background image */
-        .farm-header {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            background-image: url('farm.jpg'); /* Poultry farm background */
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        /* Dark overlay */
-        .farm-header::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4);
-        }
-        /* Farm name */
-        .farm-header h1 {
-            position: relative;
-            color: white;
-            font-size: 3em;
-            z-index: 2;
-        }
-        /* Hen image */
-        .hen-image {
-            position: relative;
-            z-index: 2;
-            width: 200px;
-            margin-top: 20px;
-        }
-        /* Info section (Day, Date, Time) */
-        .info {
-            position: absolute;
-            bottom: 120px;
-            color: white;
-            font-size: 1.2em;
-            z-index: 2;
-            text-align: center;
-        }
-        /* Button */
-        .button-container {
-            position: absolute;
-            bottom: 40px;
-            z-index: 2;
-        }
-        .btn {
-            background-color: #ffcc00;
-            color: black;
-            padding: 15px 30px;
-            text-decoration: none;
-            font-size: 1.2em;
-            border-radius: 10px;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            background-color: #e6b800;
-        }
-        /* Details Page */
-        .details-page {
-            display: none;
-            padding: 20px;
-            background-color: white;
-            height: 100vh;
-        }
-        .details-page h2 {
-            text-align: center;
-        }
-        .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            background-color: #ffcc00;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: black;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Front Page -->
-        <div id="homePage" class="farm-header">
-            <h1>SK POULTRY FARM</h1>
-            <img src="hen.png" alt="Hen" class="hen-image">
-            <div class="info">
-                <p id="dayCount"></p>
-                <p id="date"></p>
-                <p id="time"></p>
-            </div>
-            <div class="button-container">
-                <a href="#" class="btn" onclick="showDetails()">Go to Details</a>
-            </div>
-        </div>
-
-        <!-- Details Page -->
-        <div id="detailsPage" class="details-page">
-            <h2>Farm Details</h2>
-            <p>Welcome to SK Poultry Farm. Here we raise healthy chickens with care and quality feed to ensure the best poultry products for our customers.</p>
-            <a href="#" class="back-btn" onclick="showHome()">Back to Home</a>
-        </div>
-    </div>
+    <link rel="stylesheet" href="style.css">
 
     <script>
-        // Date, Time, Day Count
+        // ------------------------
+        // FRONT PAGE DATE & TIME
+        // ------------------------
         function updateDateTime() {
-            let startDate = new Date("2025-08-09"); 
+            let startDate = new Date("2025-08-09"); // Day 1 start date
             let today = new Date();
             let timeDiff = today - startDate;
             let dayCount = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
@@ -133,20 +20,51 @@
             document.getElementById("date").innerText = today.toDateString();
             document.getElementById("time").innerText = today.toLocaleTimeString();
         }
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
 
-        // Show Details Page
-        function showDetails() {
-            document.getElementById("homePage").style.display = "none";
-            document.getElementById("detailsPage").style.display = "block";
+        // ------------------------
+        // DETAILS PAGE DATA SAVE
+        // ------------------------
+        function saveData() {
+            let date = new Date().toLocaleDateString();
+            let feedKg = document.getElementById("feedKg").value;
+            let weightGain = document.getElementById("weightGain").value;
+            let mortality = document.getElementById("mortality").value;
+            let saleCount = Number(document.getElementById("saleDealer1").value) + Number(document.getElementById("saleDealer2").value);
+            let feedBags = document.getElementById("feedBags").value;
+
+            let entry = {
+                date,
+                feedKg,
+                weightGain,
+                mortality,
+                saleCount,
+                feedBags
+            };
+
+            let farmData = JSON.parse(localStorage.getItem("farmData")) || [];
+            farmData.push(entry);
+            localStorage.setItem("farmData", JSON.stringify(farmData));
+
+            displayData();
+            document.getElementById("farmForm").reset();
         }
 
-        // Show Home Page
-        function showHome() {
-            document.getElementById("homePage").style.display = "flex";
-            document.getElementById("detailsPage").style.display = "none";
+        function displayData() {
+            let farmData = JSON.parse(localStorage.getItem("farmData")) || [];
+            let output = "<tr><th>Date</th><th>Feed (kg)</th><th>Weight Gain</th><th>Mortality</th><th>Sale Count</th><th>Feed Bags</th></tr>";
+
+            farmData.forEach(item => {
+                output += `<tr>
+                    <td>${item.date}</td>
+                    <td>${item.feedKg}</td>
+                    <td>${item.weightGain}</td>
+                    <td>${item.mortality}</td>
+                    <td>${item.saleCount}</td>
+                    <td>${item.feedBags}</td>
+                </tr>`;
+            });
+
+            document.getElementById("dataTable").innerHTML = output;
         }
-    </script>
-</body>
-</html>
+
+        // ---
