@@ -3,43 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Poultry Farm</title>
-    <link rel="stylesheet" href="style.css">
-    <script>
-        // Function to update date, time, and day count
-        function updateDateTime() {
-            let startDate = new Date("2025-08-09"); // Change this to Day 1 date
-            let today = new Date();
-            let timeDiff = today - startDate;
-            let dayCount = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
-
-            document.getElementById("dayCount").innerText = "Day " + dayCount;
-            document.getElementById("date").innerText = today.toDateString();
-            document.getElementById("time").innerText = today.toLocaleTimeString();
+    <title>SK POULTRY FARM</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
         }
 
-        setInterval(updateDateTime, 1000);
-        window.onload = updateDateTime;
-    </script>
+        /* Home Page Style */
+        .home-section {
+            position: relative;
+            height: 100vh;
+            background: url('farm-photo.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .farm-name {
+            font-size: 50px;
+            font-weight: bold;
+            background-color: rgba(0,0,0,0.5);
+            padding: 15px 30px;
+            border-radius: 10px;
+        }
+
+        .details-btn {
+            position: absolute;
+            bottom: 30px;
+            padding: 15px 25px;
+            font-size: 20px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .details-btn:hover {
+            background-color: #e68900;
+        }
+
+        /* Details Section */
+        .details-section {
+            padding: 50px;
+            display: none;
+            background-color: white;
+        }
+
+        .day-info {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="farm-header">
-            <img src="farm.jpg" alt="Poultry Farm">
-            <div class="overlay">
-                <h1>SK POULTRY FARM</h1>
-            </div>
-        </div>
 
-        <div class="info">
-            <p id="dayCount"></p>
-            <p id="date"></p>
-            <p id="time"></p>
-        </div>
-
-        <div class="button-container">
-            <a href="details.html" class="btn">Go to Details</a>
-        </div>
+    <!-- Home Page -->
+    <div class="home-section" id="home">
+        <div class="farm-name">SK POULTRY FARM</div>
+        <button class="details-btn" onclick="showDetails()">View Details</button>
     </div>
+
+    <!-- Details Page -->
+    <div class="details-section" id="details">
+        <div class="day-info" id="dayInfo"></div>
+
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Chicks Count</td>
+                <td>15000</td>
+            </tr>
+            <tr>
+                <td>Feed Bags</td>
+                <td>10 (1 bag = 75kg)</td>
+            </tr>
+            <tr>
+                <td>Mortality (Day 1)</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Medicine Days</td>
+                <td>5, 6, 21, 60, 90</td>
+            </tr>
+            <tr>
+                <td>Nose Cutting Days</td>
+                <td>25, 70</td>
+            </tr>
+            <tr>
+                <td>Sale Start Day</td>
+                <td>105</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        function showDetails() {
+            document.getElementById("home").style.display = "none";
+            document.getElementById("details").style.display = "block";
+            updateDayInfo();
+        }
+
+        function updateDayInfo() {
+            const startDate = new Date("2025-08-09"); // Farm start date
+            const currentDate = new Date();
+            const timeDiff = currentDate - startDate;
+            const dayCount = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = currentDate.toLocaleDateString(undefined, options);
+            const formattedTime = currentDate.toLocaleTimeString();
+
+            document.getElementById("dayInfo").innerHTML =
+                `Day ${dayCount} | Date: ${formattedDate} | Time: ${formattedTime}`;
+        }
+    </script>
+
 </body>
 </html>
