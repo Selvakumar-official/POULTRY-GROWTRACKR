@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+    text-align: center;
+}
+
+.farm-header {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+}
+
+.farm-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay h1 {
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.info {
+    margin: 20px 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.button-container {
+    margin: 30px 0;
+}
+
+.btn {
+    background-color: #f57c00;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background-color: #e65100;
+}
