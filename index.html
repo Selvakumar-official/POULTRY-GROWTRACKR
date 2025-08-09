@@ -1,154 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SK Poultry Farm Tracker</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #2e7d32; }
-        .section { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 10px; }
-        label { display: block; margin-top: 10px; }
-        input, button { padding: 8px; margin-top: 5px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 15px; }
-        table, th, td { border: 1px solid #ccc; padding: 8px; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK Poultry Farm</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Function to update date, time, and day count
+        function updateDateTime() {
+            let startDate = new Date("2025-08-09"); // Change this to Day 1 date
+            let today = new Date();
+            let timeDiff = today - startDate;
+            let dayCount = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+
+            document.getElementById("dayCount").innerText = "Day " + dayCount;
+            document.getElementById("date").innerText = today.toDateString();
+            document.getElementById("time").innerText = today.toLocaleTimeString();
+        }
+
+        setInterval(updateDateTime, 1000);
+        window.onload = updateDateTime;
+    </script>
 </head>
 <body>
+    <div class="container">
+        <div class="farm-header">
+            <img src="farm.jpg" alt="Poultry Farm">
+            <div class="overlay">
+                <h1>SK POULTRY FARM</h1>
+            </div>
+        </div>
 
-<h1>🐓 SK Poultry Farm Tracker</h1>
+        <div class="info">
+            <p id="dayCount"></p>
+            <p id="date"></p>
+            <p id="time"></p>
+        </div>
 
-<!-- Step 1: Initialize Farm -->
-<div class="section">
-    <h2>Step 1: Initialize Poultry Farm</h2>
-    <label>Chicks Count:</label>
-    <input type="number" id="chicks" value="15000">
-    
-    <label>Feed Bags Count:</label>
-    <input type="number" id="feedBags" value="10">
-    
-    <label>Feed Per Bag (Kg):</label>
-    <input type="number" id="bagWeight" value="75">
-    
-    <button onclick="initializeFarm()">Initialize</button>
-</div>
-
-<!-- Step 2: Daily Entry -->
-<div class="section">
-    <h2>Step 2: Daily Entry</h2>
-    <label>Day Number:</label>
-    <input type="number" id="dayNumber" value="1">
-    
-    <label>Feed Given (Kg):</label>
-    <input type="number" id="feedGiven">
-    
-    <label>Weight Gain per Chick (grams):</label>
-    <input type="number" id="weightGain">
-    
-    <label>Mortality Count:</label>
-    <input type="number" id="mortality">
-    
-    <button onclick="recordDay()">Save Day Data</button>
-</div>
-
-<!-- Step 3: Medicine & Nose Cutting Schedule -->
-<div class="section">
-    <h2>Step 3: Medicine & Nose Cutting Schedule</h2>
-    <p>Medicine Days: 5, 6, 21, 60, 90</p>
-    <p>Nose Cutting Days: 25, 70</p>
-</div>
-
-<!-- Step 4: Sales -->
-<div class="section">
-    <h2>Step 4: Record Sales</h2>
-    <label>Dealer 1 Sale Count:</label>
-    <input type="number" id="dealer1">
-    
-    <label>Dealer 2 Sale Count:</label>
-    <input type="number" id="dealer2">
-    
-    <button onclick="recordSale()">Add Sales</button>
-</div>
-
-<!-- Step 5: Farm Data Display -->
-<div class="section">
-    <h2>Farm Records</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Day</th>
-                <th>Feed Given (Kg)</th>
-                <th>Weight Gain (g)</th>
-                <th>Mortality</th>
-                <th>Total Chicks Left</th>
-                <th>Sales</th>
-                <th>Date & Time</th>
-            </tr>
-        </thead>
-        <tbody id="recordsTable"></tbody>
-    </table>
-</div>
-
-<script>
-let farmData = JSON.parse(localStorage.getItem("farmData")) || {
-    chicks: 0,
-    feedBags: 0,
-    bagWeight: 0,
-    records: [],
-    sales: 0
-};
-
-function initializeFarm() {
-    farmData.chicks = parseInt(document.getElementById("chicks").value);
-    farmData.feedBags = parseInt(document.getElementById("feedBags").value);
-    farmData.bagWeight = parseInt(document.getElementById("bagWeight").value);
-    saveData();
-    alert("Farm Initialized ✅");
-}
-
-function recordDay() {
-    let day = parseInt(document.getElementById("dayNumber").value);
-    let feed = parseFloat(document.getElementById("feedGiven").value);
-    let weight = parseFloat(document.getElementById("weightGain").value);
-    let mortality = parseInt(document.getElementById("mortality").value);
-
-    farmData.chicks -= mortality;
-    let dateTime = new Date().toLocaleString();
-
-    farmData.records.push({ day, feed, weight, mortality, chicksLeft: farmData.chicks, sales: farmData.sales, dateTime });
-    saveData();
-    displayRecords();
-}
-
-function recordSale() {
-    let sale1 = parseInt(document.getElementById("dealer1").value) || 0;
-    let sale2 = parseInt(document.getElementById("dealer2").value) || 0;
-    farmData.sales += sale1 + sale2;
-    farmData.chicks -= (sale1 + sale2);
-    saveData();
-    displayRecords();
-}
-
-function saveData() {
-    localStorage.setItem("farmData", JSON.stringify(farmData));
-}
-
-function displayRecords() {
-    let table = document.getElementById("recordsTable");
-    table.innerHTML = "";
-    farmData.records.forEach(r => {
-        table.innerHTML += `<tr>
-            <td>${r.day}</td>
-            <td>${r.feed}</td>
-            <td>${r.weight}</td>
-            <td>${r.mortality}</td>
-            <td>${r.chicksLeft}</td>
-            <td>${r.sales}</td>
-            <td>${r.dateTime}</td>
-        </tr>`;
-    });
-}
-
-displayRecords();
-</script>
-
+        <div class="button-container">
+            <a href="details.html" class="btn">Go to Details</a>
+        </div>
+    </div>
 </body>
 </html>
