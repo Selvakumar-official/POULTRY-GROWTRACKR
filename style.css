@@ -1,69 +1,65 @@
-/* Home page background */
-body.home {
+body {
     margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: url('277db989-296f-4d89-a24d-6cca5404f11f.png') no-repeat center center/cover;
     font-family: Arial, sans-serif;
-}
-
-/* Overlay for text */
-.overlay {
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     color: white;
     text-align: center;
 }
 
-h1 {
-    font-size: 3rem;
+.front-page {
+    background: url('hen.jpg') no-repeat center center/cover;
+    height: 100vh;
 }
 
-p {
-    font-size: 1.2rem;
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.farm-title {
+    font-size: 3em;
+    font-weight: bold;
 }
 
 .btn {
+    display: inline-block;
     padding: 10px 20px;
-    background-color: yellow;
-    color: black;
+    margin-top: 20px;
+    background: orange;
+    color: white;
     text-decoration: none;
-    font-weight: bold;
     border-radius: 5px;
 }
 
-.btn:hover {
-    background-color: orange;
+form {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
 }
 
-/* Details Page */
-body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
+label {
+    display: block;
+    margin-top: 10px;
 }
-h1, h3 {
-    color: #333;
-}
+
 input {
-    margin-bottom: 10px;
     padding: 5px;
+    margin-top: 5px;
+    width: 200px;
 }
-button {
-    margin: 5px;
-    padding: 8px 12px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #218838;
-}
+
 table {
-    width: 100%;
-    margin-top: 20px;
+    margin: 20px auto;
+    background: white;
+    color: black;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid black;
 }
