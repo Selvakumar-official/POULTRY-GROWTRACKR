@@ -7,16 +7,25 @@
     <link rel="stylesheet" href="style.css">
     <script>
         function updateDateTime() {
-            let now = new Date();
-            document.getElementById("datetime").innerHTML = now.toLocaleString();
+            let startDate = new Date("2025-08-09");
+            let today = new Date();
+            let timeDiff = today - startDate;
+            let dayCount = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+
+            document.getElementById("dayCount").innerText = "Day " + dayCount;
+            document.getElementById("date").innerText = today.toDateString();
+            document.getElementById("time").innerText = today.toLocaleTimeString();
         }
         setInterval(updateDateTime, 1000);
+        window.onload = updateDateTime;
     </script>
 </head>
-<body class="home">
+<body class="front-page">
     <div class="overlay">
-        <h1>🐔 SK POULTRY FARM</h1>
-        <p id="datetime"></p>
+        <h1 class="farm-title">🐔 SK POULTRY FARM 🐔</h1>
+        <p id="dayCount"></p>
+        <p id="date"></p>
+        <p id="time"></p>
         <a href="details.html" class="btn">Go to Details</a>
     </div>
 </body>
@@ -25,75 +34,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Poultry Farm - Details</title>
+    <title>Farm Details - SK Poultry Farm</title>
     <link rel="stylesheet" href="style.css">
     <script>
-        let chicks = 15000;
-        let feedBags = 10;
-        let bagWeight = 75; // kg
-        let sales = 0;
+        function saveData() {
+            let date = new Date().toLocaleDateString();
+            let feedKg = document.getElementById("feedKg").value;
+            let weightGain = document.getElementById("weightGain").value;
+            let mortality = document.getElementById("mortality").value;
+            let saleCount = Number(document.getElementById("saleDealer1").value) + Number(document.getElementById("saleDealer2").value);
+            let feedBags = document.getElementById("feedBags").value;
 
-        function addDailyData() {
-            let feedKg = parseFloat(document.getElementById("feedKg").value);
-            let weightGain = parseFloat(document.getElementById("weightGain").value);
-            let mortality = parseInt(document.getElementById("mortality").value);
+            let entry = {
+                date,
+                feedKg,
+                weightGain,
+                mortality,
+                saleCount,
+                feedBags
+            };
 
-            // Update chicks count after mortality
-            chicks -= mortality;
+            let farmData = JSON.parse(localStorage.getItem("farmData")) || [];
+            farmData.push(entry);
+            localStorage.setItem("farmData", JSON.stringify(farmData));
 
-            // Update feed bags left
-            let usedBags = feedKg / bagWeight;
-            feedBags -= usedBags;
-
-            // Show data
-            let table = document.getElementById("logTable");
-            let row = table.insertRow();
-            row.insertCell(0).innerHTML = new Date().toLocaleDateString();
-            row.insertCell(1).innerHTML = chicks;
-            row.insertCell(2).innerHTML = feedKg + " kg";
-            row.insertCell(3).innerHTML = weightGain + " g";
-            row.insertCell(4).innerHTML = mortality;
-            row.insertCell(5).innerHTML = feedBags.toFixed(2);
-
-            // Clear inputs
-            document.getElementById("feedKg").value = "";
-            document.getElementById("weightGain").value = "";
-            document.getElementById("mortality").value = "";
+            displayData();
+            document.getElementById("farmForm").reset();
         }
 
-        function addSale(count) {
-            sales += count;
-            document.getElementById("salesCount").innerHTML = sales;
+        function displayData() {
+            let farmData = JSON.parse(localStorage.getItem("farmData")) || [];
+            let output = "<tr><th>Date</th><th>Feed (kg)</th><th>Weight Gain</th><th>Mortality</th><th>Sale Count</th><th>Feed Bags</th></tr>";
+
+            farmData.forEach(item => {
+                output += `<tr>
+                    <td>${item.date}</td>
+                    <td>${item.feedKg}</td>
+                    <td>${item.weightGain}</td>
+                    <td>${item.mortality}</td>
+                    <td>${item.saleCount}</td>
+                    <td>${item.feedBags}</td>
+                </tr>`;
+            });
+
+            document.getElementById("dataTable").innerHTML = output;
         }
+
+        window.onload = displayData;
     </script>
 </head>
 <body>
-    <h1>SK Poultry Farm - Daily Details</h1>
+    <h1>SK Poultry Farm - Daily Tracking</h1>
+    <form id="farmForm" onsubmit="event.preventDefault(); saveData();">
+        <label>Feed Given Today (kg):</label>
+        <input type="number" id="feedKg" required>
 
-    <h3>Daily Entry</h3>
-    <label>Feed Given (kg):</label>
-    <input type="number" id="feedKg" step="0.01"><br>
-    <label>Weight Gain per Bird (g):</label>
-    <input type="number" id="weightGain" step="0.01"><br>
-    <label>Mortality:</label>
-    <input type="number" id="mortality"><br>
-    <button onclick="addDailyData()">Add Daily Data</button>
+        <label>Weight Gain (per bird):</label>
+        <input type="number" id="weightGain" required>
 
-    <h3>Sales</h3>
-    <button onclick="addSale(500)">Dealer 1 (500 hens)</button>
-    <button onclick="addSale(750)">Dealer 2 (750 hens)</button>
-    <p>Total Sold: <span id="salesCount">0</span></p>
+        <label>Mortality (count):</label>
+        <input type="number" id="mortality" required>
 
-    <h3>Log</h3>
-    <table border="1" id="logTable">
-        <tr>
-            <th>Date</th>
-            <th>Chicks Count</th>
-            <th>Feed Given</th>
-            <th>Weight Gain</th>
-            <th>Mortality</th>
-            <th>Feed Bags Left</th>
-        </tr>
-    </table>
+        <label>Sale to Dealer 1:</label>
+        <input type="number" id="saleDealer1" value="0">
+
+        <label>Sale to Dealer 2:</label>
+        <input type="number" id="saleDealer2" value="0">
+
+        <label>Feed Bags Used Today:</label>
+        <input type="number" id="feedBags" required>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <h2>Farm Data</h2>
+    <table id="dataTable" border="1"></table>
+
+    <a href="index.html" class="btn">Back to Home</a>
 </body>
-</html>
+</html>   
