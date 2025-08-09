@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script>
         function updateDateTime() {
-            let startDate = new Date("2025-08-09");
+            let startDate = new Date("2025-08-09"); // Day 1 starting date
             let today = new Date();
             let timeDiff = today - startDate;
             let dayCount = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
@@ -34,82 +34,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farm Details - SK Poultry Farm</title>
+    <title>SK Poultry Farm - Details</title>
     <link rel="stylesheet" href="style.css">
     <script>
-        function saveData() {
-            let date = new Date().toLocaleDateString();
+        function saveDetails() {
+            let chicks = document.getElementById("chicks").value;
+            let feedBags = document.getElementById("feedBags").value;
             let feedKg = document.getElementById("feedKg").value;
             let weightGain = document.getElementById("weightGain").value;
             let mortality = document.getElementById("mortality").value;
-            let saleCount = Number(document.getElementById("saleDealer1").value) + Number(document.getElementById("saleDealer2").value);
-            let feedBags = document.getElementById("feedBags").value;
+            let sales = document.getElementById("sales").value;
+            let date = new Date().toLocaleString();
 
-            let entry = {
-                date,
-                feedKg,
-                weightGain,
-                mortality,
-                saleCount,
-                feedBags
+            let record = {
+                date: date,
+                chicks: chicks,
+                feedBags: feedBags,
+                feedKg: feedKg,
+                weightGain: weightGain,
+                mortality: mortality,
+                sales: sales
             };
 
-            let farmData = JSON.parse(localStorage.getItem("farmData")) || [];
-            farmData.push(entry);
-            localStorage.setItem("farmData", JSON.stringify(farmData));
+            let records = JSON.parse(localStorage.getItem("poultryData")) || [];
+            records.push(record);
+            localStorage.setItem("poultryData", JSON.stringify(records));
 
-            displayData();
-            document.getElementById("farmForm").reset();
+            alert("Details saved successfully!");
+            displayRecords();
         }
 
-        function displayData() {
-            let farmData = JSON.parse(localStorage.getItem("farmData")) || [];
-            let output = "<tr><th>Date</th><th>Feed (kg)</th><th>Weight Gain</th><th>Mortality</th><th>Sale Count</th><th>Feed Bags</th></tr>";
-
-            farmData.forEach(item => {
-                output += `<tr>
-                    <td>${item.date}</td>
-                    <td>${item.feedKg}</td>
-                    <td>${item.weightGain}</td>
-                    <td>${item.mortality}</td>
-                    <td>${item.saleCount}</td>
-                    <td>${item.feedBags}</td>
+        function displayRecords() {
+            let records = JSON.parse(localStorage.getItem("poultryData")) || [];
+            let table = document.getElementById("recordsTable");
+            table.innerHTML = "<tr><th>Date</th><th>Chicks</th><th>Feed Bags</th><th>Feed (Kg)</th><th>Weight Gain (Kg)</th><th>Mortality</th><th>Sales</th></tr>";
+            records.forEach(r => {
+                table.innerHTML += `<tr>
+                    <td>${r.date}</td>
+                    <td>${r.chicks}</td>
+                    <td>${r.feedBags}</td>
+                    <td>${r.feedKg}</td>
+                    <td>${r.weightGain}</td>
+                    <td>${r.mortality}</td>
+                    <td>${r.sales}</td>
                 </tr>`;
             });
-
-            document.getElementById("dataTable").innerHTML = output;
         }
 
-        window.onload = displayData;
+        window.onload = displayRecords;
     </script>
 </head>
 <body>
-    <h1>SK Poultry Farm - Daily Tracking</h1>
-    <form id="farmForm" onsubmit="event.preventDefault(); saveData();">
-        <label>Feed Given Today (kg):</label>
-        <input type="number" id="feedKg" required>
+    <h1>SK Poultry Farm - Daily Records</h1>
+    <form onsubmit="saveDetails(); return false;">
+        <label>Total Chicks:</label>
+        <input type="number" id="chicks" value="15000"><br>
 
-        <label>Weight Gain (per bird):</label>
-        <input type="number" id="weightGain" required>
+        <label>Feed Bags:</label>
+        <input type="number" id="feedBags" value="10"><br>
 
-        <label>Mortality (count):</label>
-        <input type="number" id="mortality" required>
+        <label>Feed Given (Kg):</label>
+        <input type="number" id="feedKg" placeholder="Enter today's feed in kg"><br>
 
-        <label>Sale to Dealer 1:</label>
-        <input type="number" id="saleDealer1" value="0">
+        <label>Weight Gain (Kg):</label>
+        <input type="number" id="weightGain" placeholder="Enter total weight gain"><br>
 
-        <label>Sale to Dealer 2:</label>
-        <input type="number" id="saleDealer2" value="0">
+        <label>Mortality:</label>
+        <input type="number" id="mortality" placeholder="Enter dead chicks count"><br>
 
-        <label>Feed Bags Used Today:</label>
-        <input type="number" id="feedBags" required>
+        <label>Sales (Number of hens sold):</label>
+        <input type="number" id="sales" placeholder="Enter sales count"><br>
 
-        <button type="submit">Save</button>
+        <button type="submit">Save Details</button>
     </form>
 
-    <h2>Farm Data</h2>
-    <table id="dataTable" border="1"></table>
+    <h2>Previous Records</h2>
+    <table border="1" id="recordsTable"></table>
 
     <a href="index.html" class="btn">Back to Home</a>
 </body>
-</html>   
+</html>
