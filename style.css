@@ -35,7 +35,7 @@ body.front-bg {
   /* gradient overlay + background image */
   background:
     linear-gradient(var(--overlay), var(--overlay)),
-    url('images/bg.jpg') center/cover no-repeat fixed; /* <-- REPLACE path here */
+    url('projectpicture.jpg') center/cover no-repeat fixed; /* <-- REPLACE path here */
   background-color: var(--fallback-bg);
   background-size: cover;            /* scale to cover the viewport */
   background-position: center center;
