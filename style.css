@@ -1,65 +1,114 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    color: white;
-    text-align: center;
+/* ============================
+   SK Poultry Farm — Background CSS
+   Copy this into <style> or style.css
+   Replace 'images/bg.jpg' with your image path
+   ============================ */
+
+/* ---------- Step 0: theme variables ---------- */
+:root{
+  --overlay: rgba(0,0,0,0.45); /* overlay darkness (0.0 - 0.85) */
+  --fallback-bg: #0b1220;     /* fallback color while image loads */
+  --text-color: #ffffff;
+  --font-stack: Inter, Arial, Helvetica, sans-serif;
 }
 
-.front-page {
-    background: url('hen.jpg') no-repeat center center/cover;
-    height: 100vh;
+/* ---------- Step 1: base/reset ---------- */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-stack);
+  color: var(--text-color);
+  background-color: var(--fallback-bg); /* safe fallback */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.overlay {
-    background: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+/* ---------- Step 2: front-page background (recommended) ----------
+   HOW TO USE:
+   - Put your image in project (e.g. images/bg.jpg) OR use a remote URL.
+   - Add the class `front-bg` to <body> for the front page:
+       <body class="front-bg"> ... </body>
+   - To remove background on details page, remove the class in JS.
+   ---------- */
+body.front-bg {
+  /* gradient overlay + background image */
+  background:
+    linear-gradient(var(--overlay), var(--overlay)),
+    url('images/bg.jpg') center/cover no-repeat fixed; /* <-- REPLACE path here */
+  background-color: var(--fallback-bg);
+  background-size: cover;            /* scale to cover the viewport */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;      /* keeps image fixed while scrolling */
+  min-height: 100vh;
 }
 
-.farm-title {
-    font-size: 3em;
-    font-weight: bold;
+/* ---------- Step 3: ensure content sits above overlay ----------
+   If you use a pseudo-element overlay instead of the gradient above,
+   uncomment the pseudo-element block below and remove the gradient in body.front-bg.
+   (Both approaches work; gradient in background is simplest.)
+   ---------- */
+
+/* Example pseudo-element overlay (alternative approach)
+body.front-bg {
+  background: url('images/bg.jpg') center/cover no-repeat fixed;
+}
+body.front-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  pointer-events: none;
+  z-index: 0;
+}
+*/
+
+/* The main content wrapper must be above the overlay */
+.wrap, .container {
+  position: relative;
+  z-index: 1;
 }
 
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 20px;
-    background: orange;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
+/* ---------- Step 4: text & UI readability helpers ---------- */
+/* Make headings and small cards clearly readable */
+.header, .card, .container {
+  /* optional: semi-transparent background for cards */
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.12);
 }
 
-form {
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    display: inline-block;
+/* slightly muted text for descriptions */
+.muted {
+  color: rgba(255,255,255,0.78);
+  font-size: 0.95rem;
 }
 
-label {
-    display: block;
-    margin-top: 10px;
+/* smaller UI tweak for buttons so they stand out on image */
+.button, button, .btn {
+  background-color: rgba(255,165,0,0.95); /* orange button */
+  color: #0b1220;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-input {
-    padding: 5px;
-    margin-top: 5px;
-    width: 200px;
+/* ---------- Step 5: responsive tweaks (mobile) ---------- */
+/* background-attachment: fixed can be problematic / slow on mobile - switch to scroll */
+@media (max-width: 700px) {
+  body.front-bg {
+    background-attachment: scroll;
+  }
+  /* reduce overlay darkness a bit on small screens */
+  :root { --overlay: rgba(0,0,0,0.35); }
 }
 
-table {
-    margin: 20px auto;
-    background: white;
-    color: black;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 10px;
-    border: 1px solid black;
-}
+/* ---------- Step 6: performance tips (optional comments) ----------
+  - Use a compressed image (webp or optimized jpg) ~ <= 500KB for web.
+  - If you need multiple resolutions, serve a smaller image for mobile via media queries.
+  - If you want the background only on the front page, toggle the `front-bg` class
+    in your existing showFront() / showDetails() JS functions.
+  ---------- */
