@@ -1,64 +1,28 @@
-:root {
-  --overlay: rgba(0,0,0,0.45); /* overlay darkness */
-  --fallback-bg: #0b1220;      /* fallback color */
-  --text-color: #ffffff;
-  --font-stack: Inter, Arial, Helvetica, sans-serif;
+body {
+    font-family: Arial;
+    background: #f0f8f0;
+    padding: 20px;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-stack);
-  color: var(--text-color);
-  background-color: var(--fallback-bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+nav a {
+    margin-right: 15px;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-body.front-bg {
-  background:
-    linear-gradient(var(--overlay), var(--overlay)),
-    url('projectpicture.jpg') center/cover no-repeat fixed; /* Your image */
-  background-color: var(--fallback-bg);
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  min-height: 100vh;
+.login-box, .form-box {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    margin-top: 20px;
 }
 
-.wrap, .container {
-  position: relative;
-  z-index: 1;
+table {
+    border-collapse: collapse;
+    width: 80%;
 }
 
-.header, .card, .container {
-  background: rgba(255,255,255,0.03);
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 6px 18px rgba(2,6,23,0.12);
-}
-
-.muted {
-  color: rgba(255,255,255,0.78);
-  font-size: 0.95rem;
-}
-
-.button, button, .btn {
-  background-color: rgba(255,165,0,0.95);
-  color: #0b1220;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-@media (max-width: 700px) {
-  body.front-bg {
-    background-attachment: scroll;
-  }
-  :root {
-    --overlay: rgba(0,0,0,0.35);
-  }
+table, th, td {
+    border: 1px solid black;
+    padding: 10px;
 }
