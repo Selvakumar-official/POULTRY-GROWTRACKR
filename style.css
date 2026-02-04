@@ -1,28 +1,85 @@
+/* ===== Common Page Style (ALL PAGES) ===== */
 body {
-    font-family: Arial;
-    background: #f0f8f0;
-    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: red;              /* Page background */
+    color: white;                 /* Text color */
+    padding: 0;
+    margin: 0;
+
+    /* Center content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ===== Main Container ===== */
+.container {
+    background: yellow;           /* Box background */
+    color: black;                 /* Text inside box */
+    padding: 25px;
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+/* ===== Navigation ===== */
+nav {
+    margin-bottom: 20px;
 }
 
 nav a {
     margin-right: 15px;
     text-decoration: none;
     font-weight: bold;
+    color: black;
 }
 
+nav a:hover {
+    color: red;
+}
+
+/* ===== Login & Form Boxes ===== */
 .login-box, .form-box {
     background: white;
+    color: black;
     padding: 20px;
-    width: 300px;
-    margin-top: 20px;
+    margin: 20px auto;
+    border-radius: 8px;
 }
 
+/* ===== Table Style ===== */
 table {
     border-collapse: collapse;
-    width: 80%;
+    width: 100%;
+    margin-top: 15px;
 }
 
 table, th, td {
     border: 1px solid black;
+}
+
+th {
+    background: red;
+    color: white;
+}
+
+td {
     padding: 10px;
+    text-align: center;
+}
+
+/* ===== Buttons ===== */
+button, input[type="submit"] {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover, input[type="submit"]:hover {
+    background: darkred;
 }
